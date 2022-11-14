@@ -38,18 +38,30 @@ class Rect {
     {
         if(this.is_active)
         {
-            if(this.filled)
+            if(this.is_visible == false)
             {
-                this.ctx.globalAlpha = this.alpha_color;
-                this.ctx.fillStyle = this.color;
+                this.ctx.globalAlpha = 0;
+                this.ctx.fillStyle = "transparent";
                 this.ctx.fillRect(this.x, this.y, this.width, this.height);
+                this.ctx.globalAlpha = 1;
             }
             else
             {
-                this.ctx.globalAlpha = this.alpha_color;
-                this.rectStyle = this.color;
-                this.ctx.lineWidth = this.line_thickness;
-                this.ctx.strokeRect(this.x,this.y,this.width,this.height);
+                if(this.filled)
+                {
+                    this.ctx.globalAlpha = this.alpha_color;
+                    this.ctx.fillStyle = this.color;
+                    this.ctx.fillRect(this.x, this.y, this.width, this.height);
+                    this.ctx.globalAlpha = 1;
+                }
+                else
+                {
+                    this.ctx.globalAlpha = this.alpha_color;
+                    this.rectStyle = this.color;
+                    this.ctx.lineWidth = this.line_thickness;
+                    this.ctx.strokeRect(this.x,this.y,this.width,this.height);
+                    this.ctx.globalAlpha = 1;
+                }
             }
         }
     }
@@ -81,7 +93,6 @@ class Sprite {
     {
         const img = new Image(this.width,this.height);
         img.src = this.path;
-        //console.log(img);
         this.ctx.drawImage(img, this.x, this.y);
     }
 }

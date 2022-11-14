@@ -10,7 +10,7 @@ class Game
 
     clear(context)
     {
-        context.clearRect(0,0,window.innerWidth, window.innerHeight);
+        context.ctx.clearRect(0,0,window.innerWidth, window.innerHeight);
     }
 
     on_start(starting_function)
@@ -54,40 +54,34 @@ class Input {
 
     getInput()
     {
-        if(this.type == "keypress")
+        switch(this.type)
         {
-            keyPressed: addEventListener("keypress", function(e) {
-                var self = this;
-                if(e.key == self.key)
-                {
-                    self.run_function();
-                }
-            }.bind(this));
-        }
-        else if(this.type == "keydown")
-        {
-            keyDown: addEventListener("keydown", function(e) {
-                console.log("running");
-                var self = this;
-                if(e.key == self.key)
-                {
-                    self.run_function();
-                }
-            }.bind(this));
-        }
-        else if(this.type == "keyup")
-        {
-            keyUp: addEventListener("keyup", function(e) {
-                var self = this;
-                if(e.key == self.key)
-                {
-                    self.run_function();
-                }
-            }.bind(this));
-        }
-        else
-        {
-            console.error("There is no type `" + this.type + "` in the list");
+            case "keypress":
+                keyPressed: addEventListener("keypress", function(e) {
+                    if(e.key == this.key)
+                    {
+                        this.run_function();
+                    }
+                }.bind(this));
+                break;
+            case "keydown":
+                keyDown: addEventListener("keydown", function(e) {
+                    if(e.key == this.key)
+                    {
+                        this.run_function();
+                    }
+                }.bind(this));
+                break;
+            case "keyup":
+                keyUp: addEventListener("keyup", function(e) {
+                    if(e.key == this.key)
+                    {
+                        this.run_function();
+                    }
+                }.bind(this));
+                break;
+            default:
+                console.error("There is no type `" + this.type + "` in the list");
         }
     }
 }
