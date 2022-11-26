@@ -2,7 +2,7 @@
 
 Developed by [Leonardo Ulino, NoelEm](https://leonardoulino.com)
 
-Version 0.1.2
+Version 0.1.3
 
 Dimenduo.js is a 2D javascript framework to facilitate the creation of games.
 
