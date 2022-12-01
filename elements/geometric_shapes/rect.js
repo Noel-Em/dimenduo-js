@@ -12,7 +12,6 @@ class Rect {
     #alpha = 1.0;
 
     #rotation_set = false;
-    #position_set = false;
 
     constructor(x, y, width, height, filled = true, scene) {
         this.x = x;
@@ -150,12 +149,12 @@ class Rect {
         }
     }
 
-    is_colliding(element_collision)
+    is_colliding(other)
     {
-        if(element_collision.x < this.x + this.width &&
-            element_collision.x + element_collision.width > this.x &&
-            element_collision.y < this.y + this.height &&
-            element_collision.height + element_collision.y > this.y && element_collision.get_active())
+        if(other.x < this.x + this.width &&
+            other.x + other.width > this.x &&
+            other.y < this.y + this.height &&
+            other.height + other.y > this.y && other.get_active())
         {
             return true;
         }
