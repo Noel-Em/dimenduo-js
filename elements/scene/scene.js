@@ -28,20 +28,14 @@ class Scene {
     #get_height_width (size)
     {
         if(size == "fullscreen")
-        {
             return "fullscreen";
-        }
-        else
-        {
-            if(size.includes("x")) {
-                let values = size.split("x");
 
-                return [parseInt(values[0]), parseInt(values[1])];
-            }
-            else {
-                return "error";
-            }
-        }
+        if(!size.includes("x")) 
+            return "error";
+
+        let values = size.split("x");
+
+        return [parseInt(values[0]), parseInt(values[1])];
     }
 
     draw()

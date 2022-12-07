@@ -1,10 +1,10 @@
-import { Sound } from './audio/audio.js';
 import { Scene } from './scene/scene.js';
 import { Rect } from './geometric_shapes/rect.js';
 import { Circle } from  './geometric_shapes/circle.js';
 import { Sprite } from './ui_elements/sprite.js';
 import { Text } from './ui_elements/text.js';
 import { Button } from './ui_elements/button.js';
+import { Tilemap } from './scene/tilemap.js';
 
 export default {
     Scene,
@@ -13,5 +13,5 @@ export default {
     Sprite,
     Button,
     Text,
-    Sound
+    Tilemap
 }
