@@ -18,7 +18,8 @@ class Mixer {
     {
         if (id in this.#audio_ids) 
             this.#audio_ids[id] = value; 
-        console.error("Dimenduo: There is no value named '" + id + "' in the mixer");
+        else
+            console.error("Dimenduo: There is no value named '" + id + "' in the mixer");
     }
 
     get_volume(id)
