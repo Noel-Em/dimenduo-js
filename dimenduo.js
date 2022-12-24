@@ -7,11 +7,13 @@
 import { default as elements } from "./elements/elements_index.js";
 import { default as audio } from "./elements/audio_index.js";
 import { default as events } from "./events/index.js";
+import { default as camera } from "./elements/camera_index.js";
 
 var Dimenduo = {
     elements: elements,
     audio: audio,
-    events: events
+    events: events,
+    camera: camera
 };
 
 export { Dimenduo };

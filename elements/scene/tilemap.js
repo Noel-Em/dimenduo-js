@@ -8,11 +8,14 @@ class Tilemap {
     #sprite_path = {};
     #internal_tiles = [];
 
+    #scene = null;
+
     constructor(grid_size = "64x64", scene)
     {
         let split_val = grid_size.split("x");
         this.grid_size = [ parseInt(split_val[0]), parseInt(split_val[1]) ];
-        this.ctx = scene;
+        this.#scene = scene;
+        this.ctx = scene.ctx;
     }
 
     load_tile(name = null, path = null)
@@ -36,8 +39,11 @@ class Tilemap {
         {
             for(let i = 0; i < this.#internal_tiles.length; i++)
             {
-                let tile = new Sprite(this.grid_size[0] * this.#internal_tiles[i][0], this.grid_size[1] * this.#internal_tiles[i][1], this.grid_size[0], this.grid_size[1],
-                    this.#sprite_path[this.#internal_tiles[i][2]], this.ctx);
+                let tile = new Sprite(
+                    (this.grid_size[0]) * (this.#internal_tiles[i][0])
+                    , this.grid_size[0] * this.#internal_tiles[i][1]
+                    , this.grid_size[0], this.grid_size[1],
+                    this.#sprite_path[this.#internal_tiles[i][2]], this.#scene);
                 tile.draw();
             }
         }

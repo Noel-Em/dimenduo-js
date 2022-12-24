@@ -12,6 +12,7 @@ class Rect {
     #alpha = 1.0;
 
     #rotation_set = false;
+    #scene = null;
 
     constructor(x, y, width, height, filled = true, scene) {
         this.x = x;
@@ -19,6 +20,7 @@ class Rect {
         this.width = width;
         this.height = height;
         this.filled = filled;
+        this.#scene = scene;
         this.ctx = scene.ctx;
     }
 
@@ -71,6 +73,11 @@ class Rect {
         }
     }
 
+    get_element_name()
+    {
+        return "rect";
+    }
+
     // SECTION: Rect Rotation
 
     get_angle()
@@ -102,12 +109,36 @@ class Rect {
     
     #set_position() {
         if(this.#is_active)
-            this.ctx.translate( this.x + this.width / 2, this.y + this.height / 2 );
+            this.ctx.translate( this.get_sync_x() + this.get_sync_width() / 2, this.get_sync_y() + this.get_sync_height() / 2 );
     }
 
     #restore_position() {
         if(this.#is_active)
-            this.ctx.translate(-this.x - this.width / 2, -this.y - this.height / 2);
+            this.ctx.translate(-this.get_sync_x() - this.get_sync_width() / 2, -this.get_sync_y() - this.get_sync_height() / 2);
+    }
+
+    // SECTION: Sync Positions
+
+    get_sync_x()
+    {
+        return (this.#scene.get_sync().includes("width") ? (this.x + this.#scene.get_camera_coords()[0]) * this.#scene.get_ratio()[0] : this.x + this.#scene.get_camera_coords()[0]);
+    }
+
+    get_sync_y()
+    {
+        return (this.#scene.get_sync().includes("height") ? (this.y + this.#scene.get_camera_coords()[1]) * this.#scene.get_ratio()[1] : this.y + this.#scene.get_camera_coords()[1]);
+    }
+
+    get_sync_width()
+    {
+        return (this.#scene.get_sync().includes("width") ? this.width * this.#scene.get_ratio()[0] : 
+        (this.#scene.get_sync().includes("height") ? this.width * this.#scene.get_ratio()[1] : this.width));
+    }
+
+    get_sync_height()
+    {
+        return (this.#scene.get_sync().includes("height") ? this.height * this.#scene.get_ratio()[1] : 
+        (this.#scene.get_sync().includes("width") ? this.height * this.#scene.get_ratio()[0] : this.height) );
     }
 
     // SECTION: Draw
@@ -116,14 +147,7 @@ class Rect {
         this.ctx.save();
         if(this.#is_active)
         {
-            if(this.#is_visible == false)
-            {
-                this.ctx.globalAlpha = 0;
-                this.ctx.fillStyle = "transparent";
-                this.ctx.fillRect(this.x, this.y, this.width, this.height);
-                this.ctx.globalAlpha = 1;
-            }
-            else
+            if(this.#is_visible)
             {
                 this.#set_position();
                 this.#rotation_set = false;
@@ -132,14 +156,14 @@ class Rect {
                 {
                     this.ctx.globalAlpha = this.#alpha;
                     this.ctx.fillStyle = this.#color;
-                    this.ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
+                    this.ctx.fillRect(-this.get_sync_width() / 2, -this.get_sync_height() / 2, this.get_sync_width(), this.get_sync_height());
                 }
                 else
                 {
                     this.ctx.globalAlpha = this.#alpha;
                     this.rectStyle = this.#color;
                     this.ctx.lineWidth = this.#line_thickness;
-                    this.ctx.strokeRect(this.x,this.y,this.width,this.height);
+                    this.ctx.strokeRect(this.get_sync_x(),this.get_sync_x(),this.get_sync_width(),this.get_sync_height());
                 }
                 this.#restore_position();
                 this.#restore_rotation();
@@ -151,12 +175,24 @@ class Rect {
 
     is_colliding(other)
     {
-        if(other.x < this.x + this.width &&
-            other.x + other.width > this.x &&
-            other.y < this.y + this.height &&
-            other.height + other.y > this.y && other.get_active())
+        if(other.get_element_name() == "rect")
         {
-            return true;
+            if(other.get_sync_x() < this.get_sync_x() + this.get_sync_width() &&
+                other.get_sync_x() + other.get_sync_width() > this.get_sync_x() &&
+                other.get_sync_y() < this.get_sync_y() + this.get_sync_height() &&
+                other.get_sync_height() + other.get_sync_y() > this.get_sync_y() && other.get_active())
+            {
+                return true;
+            }
+        } else if(other.get_element_name() == "circle")
+        {
+            if(other.get_sync_x() < this.get_sync_x() + this.get_sync_width() &&
+                other.get_sync_x() + other.get_sync_radius() > this.get_sync_x() &&
+                other.get_sync_y() < this.get_sync_y() + this.get_sync_height() &&
+                other.get_sync_radius() + other.get_sync_y() > this.get_sync_y() && other.get_active())
+            {
+                return true;
+            }
         }
     }
 }
